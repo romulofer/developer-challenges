@@ -1,8 +1,9 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
 import { rootSaga } from "./rootSaga";
+import { dataReducer } from "../features/data/dataSlice";
 
-const rootReducer = combineReducers({});
+const rootReducer = combineReducers({ data: dataReducer });
 
 export function setupStore(preloadedState?: Partial<RootState>) {
   const sagaMiddleware = createSagaMiddleware();
