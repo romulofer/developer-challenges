@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { toChartData } from "../../../features/data/transform";
-import type { SeriesDto } from "../../../features/data/types";
-import { seriesDtoFixture } from "./fixtures";
+import { toChartData } from "../features/data/transform";
+import type { SeriesDto } from "../features/data/types";
+import { seriesDtoFixture } from "./features/data/fixtures";
 
 const ISO = [
   "2023-11-07T11:53:38.187Z",

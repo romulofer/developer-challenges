@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { fetchMachine, fetchSeries } from "../../../features/data/api";
-import { machineFixture, seriesDtoFixture } from "./fixtures";
+import { fetchMachine, fetchSeries } from "../features/data/api";
+import { machineFixture, seriesDtoFixture } from "./features/data/fixtures";
 
 const BASE_URL = "http://api.test";
 

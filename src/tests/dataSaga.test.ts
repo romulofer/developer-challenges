@@ -2,14 +2,14 @@ import { expectSaga } from "redux-saga-test-plan";
 import { call } from "redux-saga/effects";
 import { it } from "vitest";
 
-import { fetchDataWorker } from "../../../features/data/dataSaga";
-import { fetchMachine, fetchSeries } from "../../../features/data/api";
-import { machineFixture, seriesDtoFixture } from "./fixtures";
+import { fetchDataWorker } from "../features/data/dataSaga";
+import { fetchMachine, fetchSeries } from "../features/data/api";
+import { machineFixture, seriesDtoFixture } from "./features/data/fixtures";
 import {
   fetchDataFailed,
   fetchDataSucceeded,
-} from "../../../features/data/dataSlice";
-import { toChartData } from "../../../features/data/transform";
+} from "../features/data/dataSlice";
+import { toChartData } from "../features/data/transform";
 import { throwError } from "redux-saga-test-plan/providers";
 
 it("puts success with normalized charts", () =>

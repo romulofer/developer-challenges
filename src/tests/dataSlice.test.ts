@@ -8,9 +8,9 @@ import {
   selectDataError,
   selectDataStatus,
   selectMachine,
-} from "../../../features/data/dataSlice";
-import { chartsFixture, machineFixture } from "./fixtures";
-import { setupStore } from "../../../app/store";
+} from "../features/data/dataSlice";
+import { chartsFixture, machineFixture } from "./features/data/fixtures";
+import { setupStore } from "../app/store";
 
 const loaded = dataReducer(
   undefined,
