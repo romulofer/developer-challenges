@@ -1,8 +1,8 @@
 import { memo, useMemo } from "react";
 import type { ChartSeries } from "../../features/data/types";
 import { buildChartOptions } from "../../features/utils/chartOptions";
-import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
+import { HighchartsReact } from "highcharts-react-official";
 
 type TimeSeriesChartProps = {
   series: ChartSeries[];

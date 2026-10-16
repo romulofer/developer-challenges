@@ -1,12 +1,14 @@
 import { Box, Card } from "@mui/material";
 import type { SxProps, Theme } from "@mui/material/styles";
-import PrecisionManufacturing from "@mui/icons-material/PrecisionManufacturing";
-import GpsFixed from "@mui/icons-material/GpsFixed";
-import Speed from "@mui/icons-material/Speed";
-import MonitorHeart from "@mui/icons-material/MonitorHeart";
-import AccessTime from "@mui/icons-material/AccessTime";
-import type { MachineDto } from "../../features/data/types";
 import type { ElementType } from "react";
+import {
+  AccessTime,
+  GpsFixed,
+  MonitorHeart,
+  PrecisionManufacturing,
+  Speed,
+} from "@mui/icons-material";
+import type { MachineDto } from "../../features/data/types";
 
 type MachineInfoBarProps = {
   machine: MachineDto;

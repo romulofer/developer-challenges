@@ -11,11 +11,17 @@ vi.mock("highcharts-react-official", () => ({
   ),
 }));
 
-vi.mock("../features/data/chartOptions", async (importOriginal) => {
+vi.mock("../features/utils/chartOptions", async (importOriginal) => {
   const actual =
     await importOriginal<typeof import("../features/utils/chartOptions")>();
   return { ...actual, buildChartOptions: vi.fn(actual.buildChartOptions) };
 });
+
+vi.mock("highcharts-react-official", () => ({
+  HighchartsReact: ({ options }: { options: Options }) => (
+    <div data-testid="chart" data-series-count={options.series?.length} />
+  ),
+}));
 
 describe("TimeSeriesChart", () => {
   beforeEach(() => {
