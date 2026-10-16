@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "api": "json-server --watch mock/db.json --port 3001",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "e2e": "cypress run",
+    "e2e:open": "cypress open"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

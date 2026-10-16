@@ -1,75 +1,91 @@
-# React + TypeScript + Vite
+# Análise de Dados (Dynamox frontend challenge)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Dashboard for machine vibration and temperature data. It shows machine info and three time-series charts (acceleration RMS, temperature, velocity RMS). A crosshair and tooltip stay synchronized across all charts.
 
-Currently, two official plugins are available:
+![Dashboard with synchronized tooltips](docs/screenshot.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Run it
 
-## React Compiler
+Requirements:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- [Node.js](https://nodejs.org) 22.22.2+ or 24.15+ (developed on 24.21)
+- [Bun](https://bun.sh) 1.1+ (the repo ships a Bun lockfile)
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```sh
+cd frontend
+bun install
+cp .env.example .env      # API base URL, defaults to http://localhost:3001
+bun run api               # terminal 1: mock REST API on :3001
+bun run dev               # terminal 2: app on http://localhost:5173
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Open http://localhost:5173. The root path redirects to `/data`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+If you see "Não foi possível carregar os dados", the API is not running or `.env` is missing.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Scripts
+
+| Script             | What it does                                        |
+| ------------------ | --------------------------------------------------- |
+| `bun run dev`      | Vite dev server                                     |
+| `bun run api`      | Mock REST API (json-server) on port 3001            |
+| `bun run build`    | Type-check and production build                     |
+| `bun run preview`  | Serve the production build                          |
+| `bun run test:run` | Run unit tests once (`bun run test` for watch mode) |
+| `bun run lint`     | ESLint                                              |
+
+## Stack
+
+| Area                   | Libraries                                                                                      |
+| ---------------------- | ---------------------------------------------------------------------------------------------- |
+| UI                     | React 19, MUI 5 (`@mui/material`, `@mui/icons-material`, Emotion), JetBrains Mono (Fontsource) |
+| Language and build     | TypeScript 6, Vite 8                                                                           |
+| State and side effects | Redux Toolkit 2, React Redux 9, Redux Saga 1                                                   |
+| Routing                | React Router 7                                                                                 |
+| Charts                 | Highcharts 13, `highcharts-react-official`                                                     |
+| Mock API               | json-server 0.17                                                                               |
+| Tests                  | Vitest 5, Testing Library (React, user-event, jest-dom), jsdom, `redux-saga-test-plan`         |
+| Lint                   | ESLint 10, `typescript-eslint`                                                                 |
+
+## API
+
+`json-server` serves `mock/db.json`:
+
+| Endpoint       | Returns                                                                                                              |
+| -------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `GET /machine` | name, point, sample rate, range, interval                                                                            |
+| `GET /series`  | 7 series (`accelerationRms/x`, `/y`, `/z`, `velocityRms/x`, `/y`, `/z`, `temperature`) of `{ datetime, max }` points |
+
+The base URL comes from `VITE_API_URL`.
+
+## Architecture
 
 ```
+src/
+  app/            store, root saga, theme, pages and UI components
+  features/
+    data/         types, slice, saga, API client, DTO to chart transform
+    utils/        Highcharts options builder and chart sync
+  tests/          unit tests (Vitest and Testing Library)
+```
+
+- **Data flow:** `DataPage` dispatches `fetchDataRequested` on every mount, so the data is fetched each time the route is opened. The saga calls `/machine` and `/series` in parallel and normalizes the DTOs once into Highcharts-ready `[timestamp, value]` series. The UI does no transformation on render.
+- **Stale data is kept:** on a refetch or a failure, the last good data stays on screen. A thin progress bar shows a refetch. An error alert with a retry button shows a failure. An empty dataset shows an info alert.
+- **Synchronized crosshair:** `features/utils/chartSync.ts` reacts to a hover on any chart and shows the tooltip and crosshair at the same timestamp on the others. It matches points by x value with a binary search and skips hidden series. It does not re-trigger events on the target charts, so there is no feedback loop.
+- **Charts:** options come from one pure function (`buildChartOptions`) and are memoized per chart, so a hover does not rebuild them.
+- **Responsive:** single column layout. Below 480 px chart width, charts get shorter and the left margin shrinks. The tooltip does not follow touch moves, so the page still scrolls when a finger is on a chart.
+
+## Decisions and assumptions
+
+- The Figma labels the velocity chart's y axis as "Aceleração (g)". I treated this as a typo and used "Velocidade RMS (mm/s)". The unit is an assumption, because the API sends no units.
+- The Highcharts palette is pinned to light, so charts stay readable when the OS is in dark mode.
+- Series colors were sampled from the Figma frames.
+- UI text is in Portuguese. Code and docs are in English.
+
+## Tests
+
+```sh
+bun run test:run
+```
+
+The tests cover the API client, saga, slice, DTO transform, chart options, chart sync logic, and the main components and page (loading, error, retry, stale data).

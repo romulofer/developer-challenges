@@ -54,4 +54,11 @@ describe("api", () => {
 
     await expect(fetchSeries()).rejects.toThrow("Failed to fetch");
   });
+
+  it("fails fast with a clear message when VITE_API_URL is not set", async () => {
+    vi.stubEnv("VITE_API_URL", "");
+
+    await expect(fetchMachine()).rejects.toThrow(/VITE_API_URL/);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
 });
