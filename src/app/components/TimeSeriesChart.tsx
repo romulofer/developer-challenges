@@ -7,13 +7,14 @@ import { HighchartsReact } from "highcharts-react-official";
 type TimeSeriesChartProps = {
   series: ChartSeries[];
   yAxisTitle: string;
+  valueDecimals?: number;
 };
 
 function TimeSeriesChart(props: TimeSeriesChartProps) {
-  const { series, yAxisTitle } = props;
+  const { series, yAxisTitle, valueDecimals } = props;
   const options = useMemo(
-    () => buildChartOptions(series, yAxisTitle),
-    [series, yAxisTitle],
+    () => buildChartOptions(series, yAxisTitle, valueDecimals),
+    [series, yAxisTitle, valueDecimals],
   );
 
   return <HighchartsReact highcharts={Highcharts} options={options} />;

@@ -5,12 +5,6 @@ import TimeSeriesChart from "../app/components/TimeSeriesChart";
 import { chartsFixture } from "./features/data/fixtures";
 import { buildChartOptions } from "../features/utils/chartOptions";
 
-vi.mock("highcharts-react-official", () => ({
-  default: ({ options }: { options: Options }) => (
-    <div data-testid="chart" data-series-count={options.series?.length} />
-  ),
-}));
-
 vi.mock("../features/utils/chartOptions", async (importOriginal) => {
   const actual =
     await importOriginal<typeof import("../features/utils/chartOptions")>();

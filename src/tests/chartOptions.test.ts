@@ -37,3 +37,19 @@ describe("buildChartOptions", () => {
     expect(new Set(colors).size).toBe(series.length);
   });
 });
+
+describe("buildChartOptions tooltip decimals", () => {
+  const series = chartsFixture.temperature;
+
+  it("defaults to 2 decimals", () => {
+    expect(buildChartOptions(series, "x").tooltip).toMatchObject({
+      valueDecimals: 2,
+    });
+  });
+
+  it("accepts a custom number of decimals", () => {
+    expect(buildChartOptions(series, "x", 1).tooltip).toMatchObject({
+      valueDecimals: 1,
+    });
+  });
+});

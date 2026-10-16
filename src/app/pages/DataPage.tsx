@@ -15,6 +15,7 @@ type ChartConfig = {
   metric: MetricKey;
   title: string;
   yAxisTitle: string;
+  decimals: number;
 };
 
 const CHARTS: ChartConfig[] = [
@@ -22,16 +23,19 @@ const CHARTS: ChartConfig[] = [
     metric: "acceleration",
     title: "Aceleração RMS",
     yAxisTitle: "Aceleração RMS (g)",
+    decimals: 3,
   },
   {
     metric: "temperature",
     title: "Temperatura",
     yAxisTitle: "Temperatura (°C)",
+    decimals: 1,
   },
   {
     metric: "velocity",
     title: "Velocidade RMS",
     yAxisTitle: "Velocidade RMS (mm/s)",
+    decimals: 2,
   },
 ];
 
@@ -54,11 +58,12 @@ function DataPage() {
         {machine && <MachineInfoBar machine={machine} />}
         {charts && (
           <Box sx={styles.panel}>
-            {CHARTS.map(({ metric, title, yAxisTitle }) => (
+            {CHARTS.map(({ metric, title, yAxisTitle, decimals }) => (
               <ChartCard key={metric} title={title}>
                 <TimeSeriesChart
                   series={charts[metric]}
                   yAxisTitle={yAxisTitle}
+                  valueDecimals={decimals}
                 />
               </ChartCard>
             ))}
