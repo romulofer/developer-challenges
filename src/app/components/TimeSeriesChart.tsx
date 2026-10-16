@@ -2,6 +2,7 @@ import { memo, useMemo } from "react";
 import type { ChartSeries } from "../../features/data/types";
 import { buildChartOptions } from "../../features/utils/chartOptions";
 import Highcharts from "highcharts";
+import "highcharts/modules/accessibility";
 import { HighchartsReact } from "highcharts-react-official";
 
 type TimeSeriesChartProps = {

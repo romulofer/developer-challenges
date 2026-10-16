@@ -40,6 +40,7 @@ export function buildChartOptions(
     title: {
       text: undefined,
     },
+    palette: { colorScheme: "light" },
     credits: { enabled: false },
     lang: { shortMonths: SHORT_MONTHS_PT },
     xAxis: {

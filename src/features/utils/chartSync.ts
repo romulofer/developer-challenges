@@ -8,7 +8,7 @@ export function findPointIndex(
   x: number,
   hint: number,
 ): number {
-  if (!points) return -1;
+  if (points.length === 0) return -1;
   if (points[hint]?.x === x) return hint;
 
   let low = 0;
