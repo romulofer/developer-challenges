@@ -50,7 +50,12 @@ export function buildChartOptions(
     },
     yAxis: { title: { text: yAxisTitle } },
     legend: { align: "center", verticalAlign: "bottom" },
-    tooltip: { shared: true, xDateFormat: "%e. %b %Y, %H:%M", valueDecimals },
+    tooltip: {
+      shared: true,
+      xDateFormat: "%e. %b %Y, %H:%M",
+      valueDecimals,
+      followTouchMove: false,
+    },
     plotOptions: {
       series: {
         animation: false,
@@ -69,6 +74,14 @@ export function buildChartOptions(
           },
         },
       },
+    },
+    responsive: {
+      rules: [
+        {
+          condition: { maxWidth: 480 },
+          chartOptions: { chart: { height: 260, marginLeft: 56 } },
+        },
+      ],
     },
     series: series.map((s) => ({
       type: "line",

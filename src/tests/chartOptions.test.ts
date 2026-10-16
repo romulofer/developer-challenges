@@ -36,6 +36,20 @@ describe("buildChartOptions", () => {
     const colors = lines.map((s) => s.color);
     expect(new Set(colors).size).toBe(series.length);
   });
+
+  it("shrinks height and left margin on narrow charts", () => {
+    const rule = buildChartOptions(chartsFixture.temperature, "T").responsive
+      ?.rules?.[0];
+
+    expect(rule?.condition?.maxWidth).toBe(480);
+    expect(rule?.chartOptions?.chart?.height).toBe(260);
+  });
+
+  it("does not trap page scroll on touch", () => {
+    const options = buildChartOptions(chartsFixture.temperature, "T");
+
+    expect(options.tooltip?.followTouchMove).toBe(false);
+  });
 });
 
 describe("buildChartOptions tooltip decimals", () => {
