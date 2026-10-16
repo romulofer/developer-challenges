@@ -25,14 +25,16 @@ If you see "Não foi possível carregar os dados", the API is not running or `.e
 
 ## Scripts
 
-| Script             | What it does                                        |
-| ------------------ | --------------------------------------------------- |
-| `bun run dev`      | Vite dev server                                     |
-| `bun run api`      | Mock REST API (json-server) on port 3001            |
-| `bun run build`    | Type-check and production build                     |
-| `bun run preview`  | Serve the production build                          |
-| `bun run test:run` | Run unit tests once (`bun run test` for watch mode) |
-| `bun run lint`     | ESLint                                              |
+| Script                    | What it does                                        |
+| ------------------------- | --------------------------------------------------- |
+| `bun run dev`             | Vite dev server                                     |
+| `bun run api`             | Mock REST API (json-server) on port 3001            |
+| `bun run build`           | Type-check and production build                     |
+| `bun run preview`         | Serve the production build                          |
+| `bun run test:run`        | Run unit tests once (`bun run test` for watch mode) |
+| `bun run lint`            | ESLint                                              |
+| `bun run storybook`       | Component docs on http://localhost:6006             |
+| `bun run build-storybook` | Static Storybook build in `storybook-static/`       |
 
 ## Stack
 
@@ -46,6 +48,7 @@ If you see "Não foi possível carregar os dados", the API is not running or `.e
 | Mock API               | json-server 0.17                                                                               |
 | Tests                  | Vitest 5, Testing Library (React, user-event, jest-dom), jsdom, `redux-saga-test-plan`         |
 | Lint                   | ESLint 10, `typescript-eslint`                                                                 |
+| Docs                   | Storybook 10                                                                                   |
 
 ## API
 
