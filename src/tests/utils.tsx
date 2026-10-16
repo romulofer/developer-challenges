@@ -6,6 +6,8 @@ import { ThemeProvider } from "@mui/material/styles";
 import { setupStore } from "../app/store";
 import type { RootState } from "../app/store";
 import { theme } from "../app/theme";
+import { vi } from "vitest";
+import { machineFixture, seriesDtoFixture } from "./features/data/fixtures";
 
 type Options = {
   preloadedState?: Partial<RootState>;
@@ -27,4 +29,20 @@ export function renderWithProviders(
       </Provider>,
     ),
   };
+}
+
+export function stubApi() {
+  vi.stubEnv("VITE_API_URL", "http://api.test");
+  const fetchMock = vi.fn<typeof fetch>(
+    async (input) =>
+      new Response(
+        JSON.stringify(
+          String(input).endsWith("/machine")
+            ? machineFixture
+            : seriesDtoFixture,
+        ),
+      ),
+  );
+  vi.stubGlobal("fetch", fetchMock);
+  return fetchMock;
 }
