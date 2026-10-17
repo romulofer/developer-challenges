@@ -7,7 +7,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ToolingSmokeTest {
-    
+
     @Test
     fun flowEmitsInOrder() = runTest {
         flowOf(1, 2).test {
