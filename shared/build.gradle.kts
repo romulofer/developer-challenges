@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.mokkery)
+    alias(libs.plugins.sqldelight)
 }
 
 kotlin {
@@ -42,13 +43,19 @@ kotlin {
     }
 
     sourceSets {
+        getByName("androidHostTest").dependencies {
+            implementation(libs.sqldelight.sqliteDriver)
+        }
+
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.compose.uiTooling)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.sqldelight.androidDriver)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.sqldelight.nativeDriver)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -64,6 +71,8 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.contentNegotiation)
             implementation(libs.ktor.serialization.json)
+            implementation(libs.sqldelight.runtime)
+            implementation(libs.sqldelight.coroutines)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -71,6 +80,14 @@ kotlin {
             implementation(libs.turbine)
             implementation(libs.ktor.client.mock)
             implementation(libs.assertk)
+        }
+    }
+}
+
+sqldelight {
+    databases {
+        create("QuizDatabase") {
+            packageName.set("com.romulofer.kotlinMultiplatform.data.local")
         }
     }
 }
