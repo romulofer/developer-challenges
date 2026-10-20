@@ -72,4 +72,19 @@ class SensorControllerTest(
             jsonPath("$[0].data[0].max") { value(23.5) }
         }
     }
+
+    @Test
+    fun `allows the frontend origin`() {
+        mockMvc.get("/series") { header("Origin", "http://localhost:5173") }.andExpect {
+            status { isOk() }
+            header { string("Access-Control-Allow-Origin", "http://localhost:5173") }
+        }
+    }
+
+    @Test
+    fun `rejects an unknown origin`() {
+        mockMvc.get("/series") { header("Origin", "http://other.test") }.andExpect {
+            status { isForbidden() }
+        }
+    }
 }
