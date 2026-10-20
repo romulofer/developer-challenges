@@ -91,4 +91,6 @@ src/
 bun run test:run
 ```
 
+CI (GitHub Actions) runs lint, type-check, unit tests, the app build and the Storybook build on every push and pull request.
+
 The tests cover the API client, saga, slice, DTO transform, chart options, chart sync logic, and the main components and page (loading, error, retry, stale data).
