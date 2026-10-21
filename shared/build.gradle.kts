@@ -45,6 +45,9 @@ kotlin {
     sourceSets {
         getByName("androidHostTest").dependencies {
             implementation(libs.sqldelight.sqliteDriver)
+            implementation(libs.robolectric)
+            implementation(libs.androidx.compose.uiTestJunit4)
+            implementation(libs.androidx.compose.uiTestManifest)
         }
 
         androidMain.dependencies {
@@ -52,6 +55,8 @@ kotlin {
             implementation(libs.compose.uiTooling)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.sqldelight.androidDriver)
+            implementation(libs.koin.android)
+            implementation(libs.androidx.activity.compose)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -73,6 +78,10 @@ kotlin {
             implementation(libs.ktor.serialization.json)
             implementation(libs.sqldelight.runtime)
             implementation(libs.sqldelight.coroutines)
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.composeViewModel)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -80,8 +89,13 @@ kotlin {
             implementation(libs.turbine)
             implementation(libs.ktor.client.mock)
             implementation(libs.assertk)
+            implementation(libs.koin.test)
         }
     }
+}
+
+compose.resources {
+    packageOfResClass = "com.romulofer.kotlinMultiplatform.resources"
 }
 
 sqldelight {
