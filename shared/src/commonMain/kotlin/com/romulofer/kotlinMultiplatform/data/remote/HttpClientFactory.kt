@@ -9,7 +9,9 @@ import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.json.json
 
 private const val CONNECT_TIMEOUT_MILLIS = 10_000L
-private const val REQUEST_TIMEOUT_MILLIS = 15_000L
+private const val REQUEST_TIMEOUT_MILLIS = 30_000L
+
+private val TextApplicationJson = ContentType("text", "application-json")
 
 internal fun createHttpClient(engine: HttpClientEngine, baseUrl: String): HttpClient =
     HttpClient(engine) {
@@ -18,6 +20,7 @@ internal fun createHttpClient(engine: HttpClientEngine, baseUrl: String): HttpCl
         install(ContentNegotiation){
             json(apiJson)
             json(apiJson, contentType = ContentType.Text.Html)
+            json(apiJson, contentType = TextApplicationJson)
         }
 
         install(HttpTimeout) {

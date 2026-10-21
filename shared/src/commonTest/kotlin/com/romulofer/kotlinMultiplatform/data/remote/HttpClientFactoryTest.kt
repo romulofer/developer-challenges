@@ -58,6 +58,15 @@ class HttpClientFactoryTest{
     }
 
     @Test
+    fun `parses json served as text application json`() = runTest {
+        val client = clientResponding(questionJson, contentType = "text/application-json")
+
+        val dto: QuestionDto = client.get("/question").body()
+
+        assertThat(dto).isEqualTo(expectedQuestion)
+    }
+
+    @Test
     fun `throws on client error response`() = runTest {
         val client = clientResponding(
             content = "400 BAD REQUEST: Question not found.",
